@@ -1,0 +1,6 @@
+{
+  "name": "Advocate Deepak Goyal - Senior Legal Counsel & Conveyancer",
+  "description": "Chamber practice portal for Senior Advocate Deepak Goyal featuring judicial title conveyancing, documentation services, and consultation scheduling.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
