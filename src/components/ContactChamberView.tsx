@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { NavTab } from '../types';
+import { ADVOCATE_INFO } from '../data/legalData';
+import { dispatchToAdvocatePhone } from '../utils/sendNotification';
 
 interface ContactChamberViewProps {
   setActiveTab: (tab: NavTab) => void;
@@ -10,8 +12,7 @@ export const ContactChamberView: React.FC<ContactChamberViewProps> = ({ setActiv
     name: '',
     phone: '',
     email: '',
-    chamberPreference: 'high_court',
-    matterType: 'real_estate',
+    matterType: 'Property Papers & Registry',
     brief: ''
   });
   const [sent, setSent] = useState(false);
@@ -19,6 +20,17 @@ export const ContactChamberView: React.FC<ContactChamberViewProps> = ({ setActiv
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
+
+    // Send directly to father's phone
+    dispatchToAdvocatePhone({
+      formType: 'Chamber Contact Form',
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      serviceOrMatter: formData.matterType,
+      details: formData.brief
+    });
+
     setSent(true);
     setTimeout(() => {
       setSent(false);
@@ -26,184 +38,140 @@ export const ContactChamberView: React.FC<ContactChamberViewProps> = ({ setActiv
         name: '',
         phone: '',
         email: '',
-        chamberPreference: 'high_court',
-        matterType: 'real_estate',
+        matterType: 'Property Papers & Registry',
         brief: ''
       });
-    }, 4000);
+    }, 4500);
   };
 
   return (
     <div className="flex flex-col w-full bg-[#f9f9ff]">
       {/* Hero Header */}
-      <section className="bg-[#0d1c32] text-white py-16 px-6 lg:px-20 relative overflow-hidden">
-        <div className="absolute right-0 top-0 w-96 h-96 bg-[#e9c176]/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ffdea5]/15 border border-[#e9c176]/30 rounded text-[#e9c176] text-xs font-semibold uppercase tracking-wider mb-4">
-            <span className="material-symbols-outlined text-[16px]">location_on</span>
-            Chambers & Registry Contacts
+      <section className="bg-[#0d1c32] text-white py-14 px-6 lg:px-16 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#ffdea5]/15 border border-[#e9c176]/30 rounded text-[#e9c176] text-xs font-semibold uppercase tracking-wider mb-3">
+            <span className="material-symbols-outlined text-[15px]">location_on</span>
+            Court Chamber & Contact
           </div>
-          <h1 className="font-serif text-3xl lg:text-5xl font-bold tracking-tight text-white mb-4">
-            Chambers of Advocate Deepak Goyal
+          <h1 className="font-serif text-2xl sm:text-4xl font-bold text-white mb-2">
+            Chamber of Advocate Deepak Goyal
           </h1>
-          <p className="text-sm lg:text-base text-[#c5c6cd] max-w-3xl leading-relaxed mb-6">
-            Consultations are held by prior appointment at the High Court of Delhi Chamber or the Connaught Place Advisory Office. Prior security clearance is coordinated for in-chamber litigants.
+          <p className="text-xs sm:text-sm text-gray-300 max-w-2xl leading-relaxed">
+            District & Sessions Court, Bani Park, Jaipur. Visit in person during court hours or call directly for consultation and paperwork assistance.
           </p>
         </div>
       </section>
 
-      {/* CHAMBER LOCATIONS & CONTACT GRID */}
-      <section className="py-12 px-6 lg:px-20 max-w-7xl mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          {/* Location 1: Delhi High Court Chambers */}
-          <div className="bg-white p-8 rounded-xl border border-[#c5c6cd]/30 shadow-sm flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="px-3 py-1 bg-[#dee8ff] text-[#0d1c32] rounded text-xs font-bold uppercase tracking-wider">
-                  Primary Judicial Chambers
-                </span>
-                <span className="text-xs text-emerald-700 font-bold flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-                  Open Mon–Fri
-                </span>
-              </div>
-
-              <h2 className="font-serif text-2xl font-bold text-[#0d1c32] mb-2">
-                High Court of Delhi Chambers
-              </h2>
-              <p className="text-xs text-[#76849f] mb-4">
-                Chamber No. 412, Block C, Lawyers' Chambers Complex, High Court of Delhi, Sher Shah Road, New Delhi – 110503
-              </p>
-
-              <div className="space-y-2.5 text-xs text-[#44474d] mb-6 border-t border-[#c5c6cd]/20 pt-4">
-                <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#775a19] text-[16px]">schedule</span>
-                  <span>Chamber Timing: <strong>09:30 AM – 04:30 PM (Court Days)</strong></span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#775a19] text-[16px]">directions_subway</span>
-                  <span>Nearest Metro: <strong>Supreme Court Metro (Exit 2)</strong> or <strong>Khan Market</strong></span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#775a19] text-[16px]">badge</span>
-                  <span>Visitor Security: <strong>Gate No. 7</strong> (Chamber Clerk facilitates e-gate pass)</span>
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setActiveTab('schedule-consultation')}
-              className="w-full py-2.5 bg-[#0d1c32] hover:bg-[#1a2f4c] text-white text-xs font-bold uppercase tracking-wider rounded transition-colors"
-            >
-              Book High Court Chamber Consultation
-            </button>
-          </div>
-
-          {/* Location 2: Connaught Place Chambers */}
-          <div className="bg-white p-8 rounded-xl border border-[#c5c6cd]/30 shadow-sm flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="px-3 py-1 bg-[#ffdea5] text-[#261900] rounded text-xs font-bold uppercase tracking-wider">
-                  Corporate & Estate Advisory
-                </span>
-                <span className="text-xs text-emerald-700 font-bold flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-                  Open Mon–Sat
-                </span>
-              </div>
-
-              <h2 className="font-serif text-2xl font-bold text-[#0d1c32] mb-2">
-                Connaught Place Consultation Chambers
-              </h2>
-              <p className="text-xs text-[#76849f] mb-4">
-                2nd Floor, Statesman House, Barakhamba Road, Connaught Place, New Delhi – 110001
-              </p>
-
-              <div className="space-y-2.5 text-xs text-[#44474d] mb-6 border-t border-[#c5c6cd]/20 pt-4">
-                <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#775a19] text-[16px]">schedule</span>
-                  <span>Chamber Timing: <strong>05:00 PM – 08:30 PM (Mon–Sat)</strong></span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#775a19] text-[16px]">directions_subway</span>
-                  <span>Nearest Metro: <strong>Barakhamba Road Metro Station (Exit 5)</strong></span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#775a19] text-[16px]">local_parking</span>
-                  <span>Dedicated Valet & Corporate Visitor Parking Available</span>
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setActiveTab('schedule-consultation')}
-              className="w-full py-2.5 bg-[#775a19] hover:bg-[#5f4713] text-white text-xs font-bold uppercase tracking-wider rounded transition-colors"
-            >
-              Book Evening CP Consultation
-            </button>
-          </div>
-        </div>
-
-        {/* CHAMBER DIRECTORY & LITIGANT ASSISTANCE */}
+      {/* Main Grid */}
+      <section className="py-12 px-6 lg:px-16 max-w-7xl mx-auto w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Quick Helplines (5 cols) */}
-          <div className="lg:col-span-5 space-y-4">
-            <div className="bg-[#f0f3ff] p-6 rounded-xl border border-[#c5c6cd]/30">
-              <h3 className="font-serif text-lg font-bold text-[#0d1c32] mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#775a19] text-[20px]">call</span>
-                Direct Telephonic Access
-              </h3>
-              <div className="space-y-3 text-xs">
-                <div>
-                  <span className="text-[#76849f] block">Urgent Court Briefs / Senior Counsel Mobile:</span>
-                  <a href="tel:+919810244920" className="text-sm font-bold text-[#0d1c32] hover:text-[#775a19]">
-                    +91 98102 44920
-                  </a>
+          
+          {/* Left Column: Chamber Address & Contacts (5 cols) */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#c5c6cd]/30 shadow-sm space-y-4">
+              <div className="border-b border-[#c5c6cd]/20 pb-3">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#775a19] bg-[#dee8ff] px-2 py-0.5 rounded">
+                  Court Chamber
+                </span>
+                <h2 className="font-serif text-lg font-bold text-[#0d1c32] mt-2">
+                  Jaipur Sessions Court Chamber
+                </h2>
+              </div>
+
+              <div className="space-y-3.5 text-xs text-[#44474d]">
+                <div className="flex items-start gap-3">
+                  <span className="material-symbols-outlined text-[#775a19] text-[20px] shrink-0 mt-0.5">location_on</span>
+                  <div>
+                    <strong className="text-[#0d1c32] block">Address:</strong>
+                    <span>{ADVOCATE_INFO.chamberAddress}</span>
+                    <span className="text-[11px] text-[#76849f] block mt-0.5">
+                      Landmark: Opposite Collectorate / Sessions Court Gate, Bani Park, Jaipur
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-[#76849f] block">Chamber Registry Clerk / Gate Passes:</span>
-                  <a href="tel:+911123384920" className="text-sm font-bold text-[#0d1c32] hover:text-[#775a19]">
-                    +91 11 2338 4920
-                  </a>
+
+                <div className="flex items-start gap-3">
+                  <span className="material-symbols-outlined text-[#775a19] text-[20px] shrink-0 mt-0.5">call</span>
+                  <div>
+                    <strong className="text-[#0d1c32] block">Direct Mobile / WhatsApp:</strong>
+                    <a href={`tel:+91${ADVOCATE_INFO.phone}`} className="text-[#775a19] font-bold text-sm hover:underline">
+                      {ADVOCATE_INFO.phoneFormatted}
+                    </a>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-[#76849f] block">Official Counsel Email:</span>
-                  <span className="text-sm font-bold text-[#0d1c32]">
-                    chambers@advocatedeepakgoyal.in
-                  </span>
+
+                <div className="flex items-start gap-3">
+                  <span className="material-symbols-outlined text-[#775a19] text-[20px] shrink-0 mt-0.5">mail</span>
+                  <div>
+                    <strong className="text-[#0d1c32] block">Email:</strong>
+                    <a href={`mailto:${ADVOCATE_INFO.email}`} className="text-[#0d1c32] hover:underline">
+                      {ADVOCATE_INFO.email}
+                    </a>
+                  </div>
                 </div>
+
+                <div className="flex items-start gap-3">
+                  <span className="material-symbols-outlined text-[#775a19] text-[20px] shrink-0 mt-0.5">schedule</span>
+                  <div>
+                    <strong className="text-[#0d1c32] block">Chamber Hours:</strong>
+                    <span>Monday to Saturday: 10:00 AM – 07:30 PM</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2 flex flex-col gap-2">
+                <a
+                  href={`https://wa.me/91${ADVOCATE_INFO.phone}?text=${encodeURIComponent('Hello Advocate Deepak Goyal ji, I would like to visit your Jaipur Sessions Court chamber for consultation.')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs flex items-center justify-center gap-2 shadow"
+                >
+                  <span className="material-symbols-outlined text-[16px]">chat</span>
+                  Message on WhatsApp ({ADVOCATE_INFO.phoneFormatted})
+                </a>
+
+                <a
+                  href={`tel:+91${ADVOCATE_INFO.phone}`}
+                  className="w-full py-2 bg-[#0d1c32] hover:bg-[#1a2f4c] text-white font-bold rounded-lg text-xs flex items-center justify-center gap-2"
+                >
+                  <span className="material-symbols-outlined text-[16px]">call</span>
+                  Call Advocate Directly
+                </a>
               </div>
             </div>
 
-            <div className="p-4 bg-white rounded-xl border border-[#c5c6cd]/30 text-xs text-[#44474d] space-y-2">
-              <span className="text-xs font-bold text-[#0d1c32] block">
-                Privilege & Bar Council Statutory Disclaimer
-              </span>
-              <p className="text-[11px] leading-relaxed text-[#76849f]">
-                As per the rules of the Bar Council of India, this portal does not solicit clients or advertise legal services. Litigants accessing this page are doing so solely to seek information regarding the practice and chambers of Advocate Deepak Goyal.
+            {/* Sub-Registrar / Other Court Office */}
+            <div className="bg-[#f0f3ff] p-5 rounded-xl border border-[#c5c6cd]/30 text-xs text-[#44474d] space-y-2">
+              <h4 className="font-bold text-[#0d1c32] uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-[#775a19] text-[16px]">edit_document</span>
+                Sub-Registrar Office Assistance
+              </h4>
+              <p className="text-[11px] leading-relaxed">
+                We also provide physical assistance across Sub-Registrar offices in Jaipur (Jaipur I, II, III, Sanganer, Jhotwara, Amer) for registry day execution, biometric signatures, and deed collection.
               </p>
             </div>
           </div>
 
-          {/* Direct Brief Transmission (7 cols) */}
-          <div className="lg:col-span-7 bg-white p-6 md:p-8 rounded-xl border border-[#c5c6cd]/30 shadow-sm">
-            <h3 className="font-serif text-xl font-bold text-[#0d1c32] mb-1">
-              Dispatch Confidential Legal Brief
-            </h3>
-            <p className="text-xs text-[#44474d] mb-6">
-              Litigants with matters requiring urgent filing or conveyancing vetting may transmit preliminary notes directly to the chamber desk.
-            </p>
+          {/* Right Column: Send Details to Phone Form (7 cols) */}
+          <div className="lg:col-span-7 bg-white p-6 sm:p-8 rounded-2xl border border-[#c5c6cd]/30 shadow-sm space-y-4">
+            <div className="border-b border-[#c5c6cd]/20 pb-3">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#775a19]">
+                Send Message
+              </span>
+              <h2 className="font-serif text-xl font-bold text-[#0d1c32] mt-0.5">
+                Send Details to Advocate Deepak Goyal
+              </h2>
+              <p className="text-xs text-[#44474d] mt-1">
+                When you submit, your inquiry is sent directly to Advocate Deepak Goyal's phone (<strong>+91 98280 89628</strong>).
+              </p>
+            </div>
 
             {sent ? (
-              <div className="p-6 bg-[#f0f3ff] rounded-lg text-center">
-                <span className="material-symbols-outlined text-emerald-600 text-[32px] block mb-2">
-                  verified
-                </span>
-                <h4 className="font-serif text-base font-bold text-[#0d1c32]">
-                  Brief Received by Chamber Clerk
-                </h4>
-                <p className="text-xs text-[#44474d] mt-1">
-                  Advocate Deepak Goyal will review your notes and telephone you within 2 business hours.
+              <div className="p-6 bg-emerald-50 border border-emerald-300 rounded-xl text-center space-y-2">
+                <span className="material-symbols-outlined text-emerald-600 text-[36px]">check_circle</span>
+                <h3 className="font-bold text-sm text-[#0d1c32]">Message Sent Directly to Phone!</h3>
+                <p className="text-xs text-[#44474d]">
+                  Advocate Deepak Goyal has received your details at +91 98280 89628. You will receive a callback or WhatsApp reply shortly.
                 </p>
               </div>
             ) : (
@@ -211,28 +179,29 @@ export const ContactChamberView: React.FC<ContactChamberViewProps> = ({ setActiv
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="font-semibold text-[#0d1c32] block mb-1">
-                      Your Full Name <span className="text-red-500">*</span>
+                      Your Name (आपका नाम) *
                     </label>
                     <input
                       type="text"
                       required
+                      placeholder="e.g. Anand Sharma"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="e.g. Anand Mehra"
-                      className="w-full px-3 py-2 border border-[#c5c6cd] rounded focus:ring-1 focus:ring-[#775a19] focus:outline-none"
+                      className="w-full px-3.5 py-2.5 border border-[#c5c6cd] rounded-lg text-xs focus:ring-1 focus:ring-[#775a19] focus:outline-none"
                     />
                   </div>
+
                   <div>
                     <label className="font-semibold text-[#0d1c32] block mb-1">
-                      Mobile / WhatsApp <span className="text-red-500">*</span>
+                      Mobile / WhatsApp Number *
                     </label>
                     <input
                       type="tel"
                       required
+                      placeholder="e.g. 98280XXXXX"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      placeholder="+91 98XXX XXXXX"
-                      className="w-full px-3 py-2 border border-[#c5c6cd] rounded focus:ring-1 focus:ring-[#775a19] focus:outline-none"
+                      className="w-full px-3.5 py-2.5 border border-[#c5c6cd] rounded-lg text-xs focus:ring-1 focus:ring-[#775a19] focus:outline-none"
                     />
                   </div>
                 </div>
@@ -240,61 +209,63 @@ export const ContactChamberView: React.FC<ContactChamberViewProps> = ({ setActiv
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="font-semibold text-[#0d1c32] block mb-1">
-                      Preferred Chamber Venue
+                      Your Email (Optional)
                     </label>
-                    <select
-                      value={formData.chamberPreference}
-                      onChange={(e) => setFormData({ ...formData, chamberPreference: e.target.value })}
-                      className="w-full px-3 py-2 border border-[#c5c6cd] rounded bg-white focus:ring-1 focus:ring-[#775a19] focus:outline-none"
-                    >
-                      <option value="high_court">Delhi High Court (Day Chamber)</option>
-                      <option value="connaught_place">Connaught Place (Evening Advisory)</option>
-                      <option value="telephonic">Encrypted Tele-Consultation</option>
-                    </select>
+                    <input
+                      type="email"
+                      placeholder="name@email.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full px-3.5 py-2.5 border border-[#c5c6cd] rounded-lg text-xs focus:ring-1 focus:ring-[#775a19] focus:outline-none"
+                    />
                   </div>
+
                   <div>
                     <label className="font-semibold text-[#0d1c32] block mb-1">
-                      Legal Domain / Matter
+                      Paperwork / Matter
                     </label>
                     <select
                       value={formData.matterType}
                       onChange={(e) => setFormData({ ...formData, matterType: e.target.value })}
-                      className="w-full px-3 py-2 border border-[#c5c6cd] rounded bg-white focus:ring-1 focus:ring-[#775a19] focus:outline-none"
+                      className="w-full px-3.5 py-2.5 border border-[#c5c6cd] rounded-lg text-xs bg-white focus:ring-1 focus:ring-[#775a19] focus:outline-none"
                     >
-                      <option value="real_estate">Real Estate & Title Diligence</option>
-                      <option value="wills_succession">Wills, Estates & Succession</option>
-                      <option value="commercial_contracts">Corporate & Commercial Lease</option>
-                      <option value="nri_advisory">NRI Power of Attorney & Property</option>
-                      <option value="civil_litigation">Court Recovery & Section 138</option>
+                      <option value="Property Papers & Registry">Property Papers & Registry (मकान/जमीन की रजिस्ट्री)</option>
+                      <option value="Marriage Certificate">Marriage Certificate (विवाह प्रमाण पत्र)</option>
+                      <option value="Death Certificate">Death Certificate (मृत्यु प्रमाण पत्र)</option>
+                      <option value="Birth Certificate">Birth Certificate (जन्म प्रमाण पत्र)</option>
+                      <option value="Agreement to Sell / Bayana">Agreement to Sell / Bayana</option>
+                      <option value="Will / Vasiyat">Will / Vasiyat (वसीयत)</option>
+                      <option value="Rent Agreement & Affidavits">Rent Agreement & Affidavits</option>
+                      <option value="Legal Notice">Legal Notice & Recovery</option>
+                      <option value="Other Legal Matter">Other Legal Matter</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
                   <label className="font-semibold text-[#0d1c32] block mb-1">
-                    Matter Outline / Transaction Summary
+                    Your Message / Query (विवरण)
                   </label>
                   <textarea
                     rows={4}
+                    placeholder="Describe what help you need..."
                     value={formData.brief}
                     onChange={(e) => setFormData({ ...formData, brief: e.target.value })}
-                    placeholder="Briefly state property address, dispute history, urgent filing deadlines, or documents available..."
-                    className="w-full px-3 py-2 border border-[#c5c6cd] rounded focus:ring-1 focus:ring-[#775a19] focus:outline-none"
+                    className="w-full px-3.5 py-2.5 border border-[#c5c6cd] rounded-lg text-xs focus:ring-1 focus:ring-[#775a19] focus:outline-none"
                   ></textarea>
                 </div>
 
-                <div className="flex justify-end">
-                  <button
-                    type="submit"
-                    className="px-6 py-2.5 bg-[#775a19] hover:bg-[#5f4713] text-white text-xs font-bold uppercase tracking-wider rounded transition-colors shadow-md flex items-center gap-2"
-                  >
-                    <span className="material-symbols-outlined text-[16px]">send</span>
-                    Transmit Brief to Chamber Desk
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  className="w-full py-3 bg-[#e9c176] hover:bg-[#ffdea5] text-[#0d1c32] font-bold rounded-lg text-xs transition-colors flex items-center justify-center gap-2 shadow cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-[16px]">send</span>
+                  Send Directly to Advocate Deepak Goyal (+91 98280 89628)
+                </button>
               </form>
             )}
           </div>
+
         </div>
       </section>
     </div>

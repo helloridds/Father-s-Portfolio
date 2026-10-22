@@ -9,7 +9,7 @@ export type NavTab =
 
 export interface InstrumentItem {
   id: string;
-  category: 'real-estate' | 'succession' | 'corporate' | 'notarial';
+  category: 'certificate' | 'property' | 'succession' | 'notarial' | 'real-estate' | 'corporate';
   categoryLabel: string;
   badge: string;
   badgeType: 'primary' | 'secondary' | 'neutral';

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavTab } from '../types';
+import { ADVOCATE_INFO } from '../data/legalData';
 
 interface HeaderProps {
   activeTab: NavTab;
@@ -17,160 +18,150 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, onBookC
   };
 
   return (
-    <header className="fixed top-0 w-full z-50 bg-[#0d1c32] text-white shadow-[0_12px_32px_-4px_rgba(10,25,47,0.18)]">
-      {/* Top Institutional Notification Strip */}
-      <div className="hidden lg:block border-b border-[#c5c6cd]/20 bg-[#0d1c32]/95 py-1.5 px-6 lg:px-20">
-        <div className="max-w-7xl mx-auto flex items-center justify-between font-legal-subtext text-[#76849f]">
-          <div className="flex items-center gap-5">
-            <span className="flex items-center gap-1.5 text-[#e9c176]">
-              <span className="material-symbols-outlined text-[14px]">gavel</span>
-              Bar Council Enrolment: D/1984/2004
+    <header className="fixed top-0 w-full z-50 bg-[#0d1c32] text-white shadow-[0_8px_24px_rgba(10,25,47,0.18)]">
+      {/* Top Notification Strip */}
+      <div className="hidden lg:block border-b border-white/10 bg-[#0a172a] py-1.5 px-6 lg:px-16">
+        <div className="max-w-7xl mx-auto flex items-center justify-between text-xs text-[#a0aec0]">
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1.5 text-[#e9c176] font-medium">
+              <span className="material-symbols-outlined text-[15px]">balance</span>
+              {ADVOCATE_INFO.courtShort}
             </span>
-            <span className="text-[#c5c6cd]/40">|</span>
-            <span>High Court of Judicature & Supreme Court Practice</span>
+            <span className="text-white/20">|</span>
+            <span>{ADVOCATE_INFO.experience} • Civil, Property & Documentation</span>
           </div>
           <div className="flex items-center gap-5">
-            <span>Chamber Hours: Mon - Sat: 09:30 AM - 08:00 PM IST</span>
-            <span className="text-[#c5c6cd]/40">|</span>
             <a
-              href="tel:+919810244920"
-              className="flex items-center gap-1.5 text-white font-semibold hover:text-[#ffdea5] transition-colors"
+              href={`mailto:${ADVOCATE_INFO.email}`}
+              className="hover:text-white transition-colors flex items-center gap-1"
+            >
+              <span className="material-symbols-outlined text-[14px] text-[#e9c176]">mail</span>
+              {ADVOCATE_INFO.email}
+            </a>
+            <span className="text-white/20">|</span>
+            <a
+              href={`tel:+91${ADVOCATE_INFO.phone}`}
+              className="flex items-center gap-1.5 text-white font-semibold hover:text-[#e9c176] transition-colors"
             >
               <span className="material-symbols-outlined text-[15px] text-[#e9c176]">call</span>
-              Urgent Briefs: +91 98102 44920
+              Direct Call: {ADVOCATE_INFO.phoneFormatted}
             </a>
           </div>
         </div>
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="h-20 max-w-7xl mx-auto px-6 lg:px-20 flex items-center justify-between">
-        {/* Brand Logo & Senior Title */}
-        <div className="flex items-center gap-5">
+      <div className="h-18 lg:h-20 max-w-7xl mx-auto px-6 lg:px-16 flex items-center justify-between">
+        {/* Brand Logo & Name */}
+        <div className="flex items-center gap-3">
           <button
             onClick={() => handleNav('about')}
             className="flex items-center gap-3 group text-left cursor-pointer"
           >
-            <img
-              alt="Advocate Deepak Goyal Logo"
-              className="h-8 w-auto object-contain"
-              src="https://lh3.googleusercontent.com/aida/AEtjO1VDYe2SRk_UdKV9bYLwEISDLrVH5JDYB1dcmr69oQnLzVO0Wb0rhD_RiHKEEESMFDcQjPSqFtXNz0a-28ddu2hUCGANv4zguTbeSts7rzOUstqWERHayc7Zv96wm2l0BWi83_m6NlB7VCX3aB9dRShkqZhRe3FpMhZ6Mi3a8IrtnU4oRakBqHpIHfCvpX_PaodBJ0dQQDB6cxNAHYIhS3Tb1kHaoQ84OJzLrK2XUhH3rzjAzqceteeeHws"
-            />
+            <div className="w-10 h-10 rounded-lg bg-[#e9c176] text-[#0d1c32] flex items-center justify-center shadow-md font-serif font-bold text-xl group-hover:scale-105 transition-transform">
+              <span className="material-symbols-outlined text-[24px]">gavel</span>
+            </div>
             <div className="flex flex-col">
-              <span className="font-serif text-[22px] text-white font-semibold tracking-wide leading-tight group-hover:text-[#ffdea5] transition-colors">
-                Deepak Goyal
+              <span className="font-serif text-xl lg:text-2xl text-white font-bold tracking-tight leading-tight group-hover:text-[#e9c176] transition-colors">
+                Advocate Deepak Goyal
               </span>
-              <span className="font-legal-subtext tracking-widest uppercase text-[#e9c176]">
-                Senior Advocate & Legal Drafter
+              <span className="text-[11px] font-medium tracking-wide uppercase text-[#e9c176]">
+                {ADVOCATE_INFO.courtShort}
               </span>
             </div>
           </button>
         </div>
 
         {/* Desktop Nav Items */}
-        <nav className="hidden xl:flex items-center gap-7">
+        <nav className="hidden xl:flex items-center gap-6 text-sm font-medium">
           <button
             onClick={() => handleNav('about')}
-            className={`transition-colors py-2 text-sm font-semibold cursor-pointer ${
+            className={`py-2 transition-colors cursor-pointer ${
               activeTab === 'about'
-                ? 'text-[#ffdea5] border-b-2 border-[#ffdea5]'
-                : 'text-[#76849f] hover:text-white'
+                ? 'text-[#e9c176] border-b-2 border-[#e9c176]'
+                : 'text-gray-300 hover:text-white'
             }`}
           >
             About
           </button>
           <button
             onClick={() => handleNav('expertise-and-paperwork')}
-            className={`transition-colors py-2 text-sm font-semibold cursor-pointer ${
+            className={`py-2 transition-colors cursor-pointer ${
               activeTab === 'expertise-and-paperwork'
-                ? 'text-[#ffdea5] border-b-2 border-[#ffdea5]'
-                : 'text-[#76849f] hover:text-white'
+                ? 'text-[#e9c176] border-b-2 border-[#e9c176]'
+                : 'text-gray-300 hover:text-white'
             }`}
           >
-            Expertise & Paperwork
+            Certificates & Paperwork
           </button>
           <button
             onClick={() => handleNav('documentation-services')}
-            className={`transition-colors py-2 text-sm font-semibold cursor-pointer ${
+            className={`py-2 transition-colors cursor-pointer ${
               activeTab === 'documentation-services'
-                ? 'text-[#ffdea5] border-b-2 border-[#ffdea5]'
-                : 'text-[#76849f] hover:text-white'
+                ? 'text-[#e9c176] border-b-2 border-[#e9c176]'
+                : 'text-gray-300 hover:text-white'
             }`}
           >
-            Documentation Services
+            All Legal Services
           </button>
           <button
             onClick={() => handleNav('track-record')}
-            className={`transition-colors py-2 text-sm font-semibold cursor-pointer ${
+            className={`py-2 transition-colors cursor-pointer ${
               activeTab === 'track-record'
-                ? 'text-[#ffdea5] border-b-2 border-[#ffdea5]'
-                : 'text-[#76849f] hover:text-white'
+                ? 'text-[#e9c176] border-b-2 border-[#e9c176]'
+                : 'text-gray-300 hover:text-white'
             }`}
           >
-            Track Record
+            Experience
           </button>
           <button
             onClick={() => handleNav('client-reviews')}
-            className={`transition-colors py-2 text-sm font-semibold cursor-pointer ${
+            className={`py-2 transition-colors cursor-pointer ${
               activeTab === 'client-reviews'
-                ? 'text-[#ffdea5] border-b-2 border-[#ffdea5]'
-                : 'text-[#76849f] hover:text-white'
+                ? 'text-[#e9c176] border-b-2 border-[#e9c176]'
+                : 'text-gray-300 hover:text-white'
             }`}
           >
-            Client Reviews
+            Reviews
           </button>
           <button
             onClick={() => handleNav('contact-and-chamber')}
-            className={`transition-colors py-2 text-sm font-semibold cursor-pointer ${
+            className={`py-2 transition-colors cursor-pointer ${
               activeTab === 'contact-and-chamber'
-                ? 'text-[#ffdea5] border-b-2 border-[#ffdea5]'
-                : 'text-[#76849f] hover:text-white'
+                ? 'text-[#e9c176] border-b-2 border-[#e9c176]'
+                : 'text-gray-300 hover:text-white'
             }`}
           >
-            Contact & Chamber
+            Chamber & Court
           </button>
         </nav>
 
-        {/* Right CTA & Profile */}
-        <div className="flex items-center gap-4">
-          <div className="hidden sm:flex flex-col text-right">
-            <span className="font-legal-subtext text-[#76849f] uppercase tracking-wider">
-              Direct Hotline
-            </span>
-            <a
-              href="tel:+919810244920"
-              className="text-sm text-white font-semibold tracking-tight hover:text-[#ffdea5] transition-colors"
-            >
-              +91 98102 44920
-            </a>
-          </div>
+        {/* Right CTA & Direct WhatsApp/Call */}
+        <div className="flex items-center gap-3">
+          <a
+            href={`https://wa.me/91${ADVOCATE_INFO.phone}?text=${encodeURIComponent('Hello Advocate Deepak Goyal ji, I need legal consultation / paperwork assistance.')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-semibold shadow transition-colors"
+          >
+            <span className="material-symbols-outlined text-[16px]">chat</span>
+            <span>WhatsApp</span>
+          </a>
 
           <button
             onClick={() => {
               if (onBookClick) onBookClick();
               else handleNav('schedule-consultation');
             }}
-            className="bg-[#e9c176] text-[#261900] hover:bg-[#ffdea5] px-4 py-2.5 rounded-sm shadow-[0_4px_12px_-2px_rgba(10,25,47,0.2)] transition-all flex items-center gap-1.5 font-semibold text-sm cursor-pointer"
+            className="bg-[#e9c176] text-[#0d1c32] hover:bg-[#ffdea5] px-4 py-2 rounded text-xs lg:text-sm font-bold shadow transition-all cursor-pointer"
           >
-            <span>Schedule Consultation</span>
-          </button>
-
-          <button
-            onClick={() => handleNav('about')}
-            title="Advocate Deepak Goyal Profile"
-            className="cursor-pointer"
-          >
-            <img
-              alt="Profile"
-              className="w-8 h-8 rounded-full object-cover ring-1 ring-[#e9c176]/40 hover:ring-[#ffdea5] transition-all"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZzzEXXvbL9n_tzQMvRMko5MCtboSOCssMCxJhszlgjeZdRCg9nOa7LZGEMlLJwnr_EPIDAXqSV290WUh3POieNN7qEpeVpXo1k4XKzLXmlF-h2G-AmdTpWBQXmgBPprkDwj_DksdigUvgCgv-EMdiGZ_RK19UV1AGqFRsaw0YAIB79kVHCuLLCeL1X08Y1LT2LL9a2KtJbWrr58SPADmuvyVrigHn4-1xa0ikvuVaOJo0JMgfLqeRJw"
-            />
+            Consultation Booking
           </button>
 
           {/* Mobile Menu Toggle Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="xl:hidden text-white p-2 hover:text-[#ffdea5] transition-colors"
+            className="xl:hidden text-white p-2 hover:text-[#e9c176] transition-colors"
             aria-label="Toggle Navigation Menu"
           >
             <span className="material-symbols-outlined text-2xl">
@@ -182,43 +173,43 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, onBookC
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="xl:hidden bg-[#0a192f] border-t border-[#c5c6cd]/20 px-6 py-4 flex flex-col gap-3 shadow-xl">
+        <div className="xl:hidden bg-[#0a172a] border-t border-white/10 px-6 py-4 flex flex-col gap-3 shadow-xl">
           <button
             onClick={() => handleNav('about')}
             className={`text-left py-2 text-sm font-semibold ${
-              activeTab === 'about' ? 'text-[#ffdea5]' : 'text-gray-300'
+              activeTab === 'about' ? 'text-[#e9c176]' : 'text-gray-300'
             }`}
           >
-            About Advocate Goyal
+            About Advocate Deepak Goyal
           </button>
           <button
             onClick={() => handleNav('expertise-and-paperwork')}
             className={`text-left py-2 text-sm font-semibold ${
-              activeTab === 'expertise-and-paperwork' ? 'text-[#ffdea5]' : 'text-gray-300'
+              activeTab === 'expertise-and-paperwork' ? 'text-[#e9c176]' : 'text-gray-300'
             }`}
           >
-            Expertise & Paperwork
+            Certificates & Paperwork (Marriage, Death, Birth, Property)
           </button>
           <button
             onClick={() => handleNav('documentation-services')}
             className={`text-left py-2 text-sm font-semibold ${
-              activeTab === 'documentation-services' ? 'text-[#ffdea5]' : 'text-gray-300'
+              activeTab === 'documentation-services' ? 'text-[#e9c176]' : 'text-gray-300'
             }`}
           >
-            Documentation Services (15 Instruments)
+            All Documentation Services
           </button>
           <button
             onClick={() => handleNav('track-record')}
             className={`text-left py-2 text-sm font-semibold ${
-              activeTab === 'track-record' ? 'text-[#ffdea5]' : 'text-gray-300'
+              activeTab === 'track-record' ? 'text-[#e9c176]' : 'text-gray-300'
             }`}
           >
-            Track Record & Past Matters
+            Experience & Track Record
           </button>
           <button
             onClick={() => handleNav('client-reviews')}
             className={`text-left py-2 text-sm font-semibold ${
-              activeTab === 'client-reviews' ? 'text-[#ffdea5]' : 'text-gray-300'
+              activeTab === 'client-reviews' ? 'text-[#e9c176]' : 'text-gray-300'
             }`}
           >
             Client Reviews
@@ -226,21 +217,32 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, onBookC
           <button
             onClick={() => handleNav('contact-and-chamber')}
             className={`text-left py-2 text-sm font-semibold ${
-              activeTab === 'contact-and-chamber' ? 'text-[#ffdea5]' : 'text-gray-300'
+              activeTab === 'contact-and-chamber' ? 'text-[#e9c176]' : 'text-gray-300'
             }`}
           >
-            Contact & Chamber Locations
+            Jaipur Sessions Court Chamber & Contact
           </button>
-          <button
-            onClick={() => handleNav('schedule-consultation')}
-            className="mt-2 w-full bg-[#e9c176] text-[#261900] py-2.5 rounded font-semibold text-center"
-          >
-            Priority Chamber Booking
-          </button>
-          <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs text-[#76849f]">
-            <span>Delhi High Court Chamber No. 412</span>
-            <a href="tel:+919810244920" className="text-[#e9c176] font-semibold">
-              +91 98102 44920
+          <div className="pt-2 flex flex-col gap-2">
+            <button
+              onClick={() => handleNav('schedule-consultation')}
+              className="w-full bg-[#e9c176] text-[#0d1c32] py-2.5 rounded font-bold text-center text-sm"
+            >
+              Book Chamber Consultation
+            </button>
+            <a
+              href={`https://wa.me/91${ADVOCATE_INFO.phone}?text=${encodeURIComponent('Hello Advocate Deepak Goyal ji, I need legal consultation.')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full bg-emerald-600 text-white py-2.5 rounded font-bold text-center text-sm flex items-center justify-center gap-2"
+            >
+              <span className="material-symbols-outlined text-[18px]">chat</span>
+              Message on WhatsApp ({ADVOCATE_INFO.phoneFormatted})
+            </a>
+          </div>
+          <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs text-[#a0aec0]">
+            <span>{ADVOCATE_INFO.courtShort}</span>
+            <a href={`tel:+91${ADVOCATE_INFO.phone}`} className="text-[#e9c176] font-semibold">
+              {ADVOCATE_INFO.phoneFormatted}
             </a>
           </div>
         </div>

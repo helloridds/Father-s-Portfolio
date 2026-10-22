@@ -1,203 +1,217 @@
 import React, { useState } from 'react';
 import { NavTab } from '../types';
+import { ADVOCATE_INFO } from '../data/legalData';
+import { dispatchToAdvocatePhone } from '../utils/sendNotification';
 
 interface FooterProps {
   setActiveTab: (tab: NavTab) => void;
-  onOpenComplianceModal?: () => void;
-  onOpenTermsModal?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenComplianceModal, onOpenTermsModal }) => {
-  const [briefSubmitted, setBriefSubmitted] = useState(false);
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [briefMatter, setBriefMatter] = useState('Deed Drafting & Conveyance');
+export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
+  const [quickName, setQuickName] = useState('');
+  const [quickPhone, setQuickPhone] = useState('');
+  const [quickMatter, setQuickMatter] = useState('');
+  const [sent, setSent] = useState(false);
 
-  const handleFooterSubmit = (e: React.FormEvent) => {
+  const handleQuickSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName || !email) return;
-    setBriefSubmitted(true);
+    if (!quickName || !quickPhone) return;
+
+    dispatchToAdvocatePhone({
+      formType: 'Quick Footer Inquiry',
+      name: quickName,
+      phone: quickPhone,
+      details: quickMatter
+    });
+
+    setSent(true);
     setTimeout(() => {
-      setFullName('');
-      setEmail('');
-      setBriefSubmitted(false);
-    }, 6000);
+      setSent(false);
+      setQuickName('');
+      setQuickPhone('');
+      setQuickMatter('');
+    }, 4000);
   };
 
   return (
-    <footer className="w-full bg-[#0d1c32] text-white border-t border-[#c5c6cd]/20 pt-14 pb-8">
-      <div className="max-w-7xl mx-auto px-6 lg:px-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-[#c5c6cd]/20">
-          {/* Column 1: Advocate Seal & Credentials */}
-          <div className="lg:col-span-4 flex flex-col gap-4">
+    <footer className="bg-[#0a172a] text-white pt-16 pb-8 border-t border-white/10">
+      <div className="max-w-7xl mx-auto px-6 lg:px-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-white/10">
+          {/* Chamber Bio & Credentials (4 cols) */}
+          <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full border border-[#e9c176]/60 flex items-center justify-center text-[#e9c176]">
-                <span className="material-symbols-outlined text-2xl">balance</span>
+              <div className="w-9 h-9 rounded bg-[#e9c176] text-[#0d1c32] flex items-center justify-center font-bold">
+                <span className="material-symbols-outlined text-[20px]">gavel</span>
               </div>
               <div>
-                <span className="font-serif text-[20px] text-white font-semibold block leading-tight">
-                  Adv. Deepak Goyal
-                </span>
-                <span className="font-legal-subtext uppercase tracking-widest text-[#e9c176]">
-                  Advocate, Supreme Court of India
-                </span>
+                <h3 className="font-serif text-lg font-bold text-white">
+                  Advocate Deepak Goyal
+                </h3>
+                <p className="text-xs text-[#e9c176] font-medium">
+                  {ADVOCATE_INFO.courtShort} • Rajasthan
+                </p>
               </div>
             </div>
 
-            <p className="font-body-sm text-[#76849f] leading-relaxed">
-              Providing discerning institutional counsel, complex commercial dispute adjudication, civil appellate litigation, and precision title deed documentation with unyielding judicial integrity for over 22 years.
+            <p className="text-xs text-[#a0aec0] leading-relaxed">
+              Practicing advocate with over 20 years of experience in property registry, marriage certificates, death and birth certificates, succession (warisan), agreements, affidavits, and civil legal matters in Jaipur.
             </p>
 
-            <div className="flex flex-col gap-1 pt-2">
-              <div className="flex items-center gap-2 font-legal-subtext text-[#76849f]">
-                <span className="material-symbols-outlined text-[16px] text-[#e9c176]">verified</span>
-                <span>Bar Council of Delhi • Enrolment No: D/1984/2004</span>
-              </div>
-              <div className="flex items-center gap-2 font-legal-subtext text-[#76849f]">
-                <span className="material-symbols-outlined text-[16px] text-[#e9c176]">workspace_premium</span>
-                <span>Delhi High Court Bar Association (Life Member #4281)</span>
+            <div className="pt-2 flex flex-col gap-2 text-xs">
+              <a
+                href={`tel:+91${ADVOCATE_INFO.phone}`}
+                className="flex items-center gap-2 text-white hover:text-[#e9c176] font-semibold"
+              >
+                <span className="material-symbols-outlined text-[16px] text-[#e9c176]">call</span>
+                <span>{ADVOCATE_INFO.phoneFormatted}</span>
+              </a>
+              <a
+                href={`mailto:${ADVOCATE_INFO.email}`}
+                className="flex items-center gap-2 text-white hover:text-[#e9c176]"
+              >
+                <span className="material-symbols-outlined text-[16px] text-[#e9c176]">mail</span>
+                <span>{ADVOCATE_INFO.email}</span>
+              </a>
+              <div className="flex items-start gap-2 text-[#a0aec0]">
+                <span className="material-symbols-outlined text-[16px] text-[#e9c176] shrink-0 mt-0.5">location_on</span>
+                <span>{ADVOCATE_INFO.chamberAddress}</span>
               </div>
             </div>
           </div>
 
-          {/* Column 2: Chamber Locations */}
-          <div className="lg:col-span-4 flex flex-col gap-4">
-            <h3 className="font-serif text-[20px] text-white font-semibold tracking-wide border-b border-[#c5c6cd]/30 pb-2">
-              Chamber Locations
-            </h3>
-            <div className="flex flex-col gap-3 font-body-sm text-[#76849f]">
-              <div>
-                <h4 className="font-semibold text-white text-sm">
-                  Supreme Court & High Court Chamber
-                </h4>
-                <p className="mt-1 text-[#76849f]">
-                  Chamber No. 412, Lawyers Chambers Block II, Delhi High Court, Sher Shah Road, New Delhi 110003
-                </p>
-              </div>
-
-              <div className="pt-1">
-                <h4 className="font-semibold text-white text-sm">
-                  Private Consultation Office
-                </h4>
-                <p className="mt-1 text-[#76849f]">
-                  Suite 9, Barakhamba Boulevard, Connaught Place Central, New Delhi 110001
-                </p>
-              </div>
-
-              <div className="pt-2 flex flex-col gap-1 font-legal-subtext">
-                <span className="text-white">
-                  Direct Registry:{' '}
-                  <a
-                    href="mailto:legal@advocatedeepakgoyal.in"
-                    className="hover:text-[#ffdea5] transition-colors"
-                  >
-                    legal@advocatedeepakgoyal.in
-                  </a>
-                </span>
-                <span className="text-white">
-                  Tele-Registry: +91 11 2338 XXXX /{' '}
-                  <a href="tel:+919810244920" className="hover:text-[#ffdea5]">
-                    +91 98102 44920
-                  </a>
-                </span>
-              </div>
-            </div>
+          {/* Quick Links (3 cols) */}
+          <div className="lg:col-span-3 space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-[#e9c176]">
+              Key Paperwork Services
+            </h4>
+            <ul className="space-y-2 text-xs text-[#cbd5e1]">
+              <li>
+                <button
+                  onClick={() => { setActiveTab('expertise-and-paperwork'); window.scrollTo(0, 0); }}
+                  className="hover:text-white transition-colors"
+                >
+                  • Marriage Certificate (विवाह प्रमाण पत्र)
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => { setActiveTab('expertise-and-paperwork'); window.scrollTo(0, 0); }}
+                  className="hover:text-white transition-colors"
+                >
+                  • Death & Legal Heir Certificate (मृत्यु प्रमाण पत्र)
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => { setActiveTab('expertise-and-paperwork'); window.scrollTo(0, 0); }}
+                  className="hover:text-white transition-colors"
+                >
+                  • Birth Certificate (जन्म प्रमाण पत्र)
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => { setActiveTab('documentation-services'); window.scrollTo(0, 0); }}
+                  className="hover:text-white transition-colors"
+                >
+                  • Property Registry & Sale Deed (बैनामा)
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => { setActiveTab('documentation-services'); window.scrollTo(0, 0); }}
+                  className="hover:text-white transition-colors"
+                >
+                  • Agreement to Sell & Bayana (बयाना)
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => { setActiveTab('documentation-services'); window.scrollTo(0, 0); }}
+                  className="hover:text-white transition-colors"
+                >
+                  • Will & Vasiyatnama (वसीयत)
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => { setActiveTab('documentation-services'); window.scrollTo(0, 0); }}
+                  className="hover:text-white transition-colors"
+                >
+                  • Rent Agreement & Affidavits
+                </button>
+              </li>
+            </ul>
           </div>
 
-          {/* Column 3: Confidential Brief Submission */}
-          <div className="lg:col-span-4 flex flex-col gap-3">
-            <h3 className="font-serif text-[20px] text-white font-semibold tracking-wide border-b border-[#c5c6cd]/30 pb-2">
-              Confidential Brief Submission
-            </h3>
-            <p className="font-legal-subtext text-[#76849f]">
-              Submit initial paperwork or request retainership review. Inquiries are protected by attorney-client privilege.
+          {/* Direct Send Form to Father's Phone (5 cols) */}
+          <div className="lg:col-span-5 bg-[#0f213c] p-5 rounded-xl border border-white/10 space-y-3">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-[#e9c176] flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-[16px]">send_to_mobile</span>
+                Send Details to Advocate's Phone
+              </h4>
+              <span className="text-[10px] text-emerald-400 font-semibold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
+                Direct to 9828089628
+              </span>
+            </div>
+
+            <p className="text-[11px] text-[#a0aec0]">
+              Fill this quick form to send your inquiry straight to Advocate Deepak Goyal's phone on WhatsApp.
             </p>
 
-            {briefSubmitted ? (
-              <div className="bg-[#112338] border border-[#e9c176]/50 p-4 rounded text-center text-sm text-[#ffdea5] flex flex-col items-center gap-1">
-                <span className="material-symbols-outlined text-2xl text-[#e9c176]">mark_email_read</span>
-                <span className="font-semibold">Privileged Brief Dispatched</span>
-                <span className="text-xs text-gray-300">
-                  Advocate Deepak Goyal’s chamber registry has received your dossier and will reach out shortly.
-                </span>
+            {sent ? (
+              <div className="p-4 bg-emerald-900/30 border border-emerald-500/40 rounded text-center">
+                <span className="material-symbols-outlined text-emerald-400 text-[24px] mb-1">check_circle</span>
+                <p className="text-xs font-bold text-white">Details Sent to Advocate Deepak Goyal</p>
+                <p className="text-[11px] text-emerald-300 mt-1">Dispatched to +91 98280 89628. You will receive a response shortly.</p>
               </div>
             ) : (
-              <form onSubmit={handleFooterSubmit} className="flex flex-col gap-2">
+              <form onSubmit={handleQuickSubmit} className="space-y-2 text-xs">
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    required
+                    placeholder="Your Name *"
+                    value={quickName}
+                    onChange={(e) => setQuickName(e.target.value)}
+                    className="w-full px-3 py-2 bg-[#091526] border border-white/15 rounded text-white text-xs focus:outline-none focus:border-[#e9c176]"
+                  />
+                  <input
+                    type="tel"
+                    required
+                    placeholder="Phone No. *"
+                    value={quickPhone}
+                    onChange={(e) => setQuickPhone(e.target.value)}
+                    className="w-full px-3 py-2 bg-[#091526] border border-white/15 rounded text-white text-xs focus:outline-none focus:border-[#e9c176]"
+                  />
+                </div>
                 <input
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  className="bg-white text-[#111c2d] text-sm px-3 py-2 rounded border border-[#c5c6cd] focus:outline-none focus:ring-1 focus:ring-[#e9c176]"
-                  placeholder="Full Legal Name / Entity"
-                  required
                   type="text"
+                  placeholder="Service needed (e.g. Property paper, Marriage certificate, Registry)..."
+                  value={quickMatter}
+                  onChange={(e) => setQuickMatter(e.target.value)}
+                  className="w-full px-3 py-2 bg-[#091526] border border-white/15 rounded text-white text-xs focus:outline-none focus:border-[#e9c176]"
                 />
-                <input
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="bg-white text-[#111c2d] text-sm px-3 py-2 rounded border border-[#c5c6cd] focus:outline-none focus:ring-1 focus:ring-[#e9c176]"
-                  placeholder="Counsel / Client Email"
-                  required
-                  type="email"
-                />
-                <select
-                  value={briefMatter}
-                  onChange={(e) => setBriefMatter(e.target.value)}
-                  className="bg-white text-[#111c2d] text-sm px-3 py-2 rounded border border-[#c5c6cd] focus:outline-none focus:ring-1 focus:ring-[#e9c176]"
-                >
-                  <option value="Deed Drafting & Conveyance">Deed Drafting & Conveyance</option>
-                  <option value="High Court Writ / Appeal">High Court Writ / Appeal</option>
-                  <option value="Arbitration & Commercial Suit">Arbitration & Commercial Suit</option>
-                  <option value="Property Due Diligence">Property Due Diligence (30-Year)</option>
-                  <option value="Testamentary Will & Probate">Testamentary Will & Probate</option>
-                </select>
                 <button
                   type="submit"
-                  className="mt-1 bg-[#e9c176] text-[#261900] hover:bg-[#ffdea5] text-sm py-2 rounded transition-colors font-semibold text-center cursor-pointer shadow"
+                  className="w-full py-2.5 bg-[#e9c176] hover:bg-[#ffdea5] text-[#0d1c32] font-bold rounded text-xs transition-colors flex items-center justify-center gap-1.5 shadow"
                 >
-                  Dispatch Brief to Chamber
+                  <span className="material-symbols-outlined text-[15px]">send</span>
+                  Send to Advocate Deepak Goyal (9828089628)
                 </button>
               </form>
             )}
           </div>
         </div>
 
-        {/* Legal Disclaimer Compliance Bar */}
-        <div className="py-4 border-b border-[#c5c6cd]/10 text-[#76849f]">
-          <p className="font-legal-subtext leading-relaxed text-justify">
-            <strong className="text-white font-semibold">
-              DISCLAIMER & COMPLIANCE UNDER BAR COUNCIL OF INDIA RULES:
-            </strong>{' '}
-            As per the rules of the Bar Council of India (specifically Section 36 of the Advocates Act, 1961 and Rule 36 of Chapter II, Part VI of the Bar Council of India Rules), advocates are prohibited from soliciting work or advertising their legal services in any manner. By viewing this web application, the user acknowledges that this portal is solely designed for providing factual information concerning Advocate Deepak Goyal&apos;s chamber practice areas, contact directory, and legal documentation proficiencies, and does not create an advocate-client relationship. The information provided herein is at the specific request of the user for educational and chamber-directory purposes and should not be construed as legal opinion or solicitation.
-          </p>
-        </div>
-
-        {/* Footer Sub-links */}
-        <div className="pt-4 flex flex-col sm:flex-row items-center justify-between font-legal-subtext text-[#76849f] gap-3">
+        {/* Bottom Bar & Disclaimer */}
+        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#a0aec0]">
           <div>
-            © 2025 Advocate Deepak Goyal. All Rights Reserved. Chambers at New Delhi, India.
+            © {new Date().getFullYear()} Advocate Deepak Goyal. Chamber at Jaipur Sessions Court, Bani Park, Jaipur.
           </div>
-          <div className="flex items-center gap-5">
-            <button
-              onClick={() => onOpenComplianceModal && onOpenComplianceModal()}
-              className="hover:text-white transition-colors cursor-pointer"
-            >
-              Bar Compliance
-            </button>
-            <button
-              onClick={() => onOpenTermsModal && onOpenTermsModal()}
-              className="hover:text-white transition-colors cursor-pointer"
-            >
-              Confidentiality & Retainer Terms
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab('contact-and-chamber');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="hover:text-white transition-colors cursor-pointer"
-            >
-              Registry Access
-            </button>
+          <div className="text-[11px] text-[#718096] text-center md:text-right">
+            Information provided as per Bar Council of India regulations for public informational purposes.
           </div>
         </div>
       </div>
